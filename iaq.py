@@ -32,7 +32,7 @@ def Read_IAQ(id):
 
 def Send_Iaq():
     try:
-        Ini_modbus('COM18', 9600, 8, "N",1)
+        Ini_modbus('/dev/ttyUSB0', 9600, 8, "N",1)
         Iaq = Read_IAQ(1)
         #MQTT_Connect()
         client = mqtt.Client()

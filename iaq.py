@@ -31,7 +31,7 @@ def Read_IAQ(id):
 
 
 def Send_Iaq():
-    try:
+    #try:
         Ini_modbus('/dev/ttyUSB0', 9600, 8, "N",1)
         Iaq = Read_IAQ(1)
         #MQTT_Connect()
@@ -44,8 +44,8 @@ def Send_Iaq():
         print(json.dumps(payload_iaq))
         print(client.publish("v1/devices/me/telemetry", json.dumps(payload_iaq)))
         time.sleep(5)
-    except:
-        pass
+    #except:
+        #pass
 
 schedule.every(1).minutes.do(Send_Iaq) 
 

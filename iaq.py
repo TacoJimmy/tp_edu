@@ -13,13 +13,13 @@ import threading
 
 
 def Ini_modbus(cport, cbaudrate, csize, cparity,cstop):
-    try:
+    #try:
         global master
         master = modbus_rtu.RtuMaster(serial.Serial(port=cport, baudrate=cbaudrate, bytesize=csize, parity=cparity, stopbits=cstop, xonxoff=0))
         master.set_timeout(5.0)
         master.set_verbose(True)
-    except:
-        pass
+    #except:
+        #pass
 
 def Read_IAQ(id):
     IAQ_Data = master.execute(id, cst.READ_INPUT_REGISTERS, 0, 4)
@@ -32,7 +32,7 @@ def Read_IAQ(id):
 
 def Send_Iaq():
     #try:
-        Ini_modbus('/dev/ttyUSB0', 9600, 8, "N",1)
+        
         Iaq = Read_IAQ(1)
         #MQTT_Connect()
         client = mqtt.Client()
@@ -50,6 +50,7 @@ def Send_Iaq():
 schedule.every(1).minutes.do(Send_Iaq) 
 
 if __name__ == '__main__':  
+    Ini_modbus('/dev/ttyUSB0', 9600, 8, "N",1)
     while True:
         schedule.run_pending()  
         time.sleep(1)

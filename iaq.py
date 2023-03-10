@@ -10,18 +10,11 @@ import modbus_tk.defines as cst
 from modbus_tk import modbus_rtu
 import threading
 
-
-
-def Ini_modbus(cport, cbaudrate, csize, cparity,cstop):
-    #try:
-        global master
-        master = modbus_rtu.RtuMaster(serial.Serial(port=cport, baudrate=cbaudrate, bytesize=csize, parity=cparity, stopbits=cstop, xonxoff=0))
-        master.set_timeout(5.0)
-        master.set_verbose(True)
-    #except:
-        #pass
-
 def Read_IAQ(id):
+    global master
+    master = modbus_rtu.RtuMaster(serial.Serial(port='/dev/ttyUSB0', baudrate=9600, bytesize=8, parity="N", stopbits=1, xonxoff=0))
+    master.set_timeout(5.0)
+    master.set_verbose(True)
     IAQ_Data = master.execute(id, cst.READ_INPUT_REGISTERS, 0, 4)
     IAQ_CO2 = IAQ_Data[0]
     IAQ_VOCt = round(IAQ_Data[1]/230,2)
@@ -50,7 +43,7 @@ def Send_Iaq():
 schedule.every(1).minutes.do(Send_Iaq) 
 
 if __name__ == '__main__':  
-    Ini_modbus('/dev/ttyUSB0', 9600, 8, "N",1)
+    
     while True:
         schedule.run_pending()  
         time.sleep(1)

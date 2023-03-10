@@ -12,7 +12,7 @@ import threading
 
 def Read_IAQ(id):
     global master
-    master = modbus_rtu.RtuMaster(serial.Serial(port='/dev/ttyUSB0', baudrate=9600, bytesize=8, parity="N", stopbits=1, xonxoff=0))
+    master = modbus_rtu.RtuMaster(serial.Serial(port='/dev/ttyS1', baudrate=9600, bytesize=8, parity="N", stopbits=1, xonxoff=0))
     master.set_timeout(5.0)
     master.set_verbose(True)
     IAQ_Data = master.execute(id, cst.READ_INPUT_REGISTERS, 0, 4)

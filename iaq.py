@@ -6,21 +6,33 @@ import json
 import time
 import schedule  
 import serial
+import modbus_tk
 import modbus_tk.defines as cst
-from modbus_tk import modbus_rtu
+from modbus_tk import modbus_tcp
 import threading
+
+import struct
+
+
+def int16_pair_to_float(num1, num2):
+    combined_num = (num1 << 16) | num2
+    packed_num = struct.pack('i', combined_num)
+    float_num = struct.unpack('f', packed_num)[0]
+    return float_num
 
 def Read_IAQ(id):
     global master
-    master = modbus_rtu.RtuMaster(serial.Serial(port='/dev/ttyS1', baudrate=9600, bytesize=8, parity="N", stopbits=1, xonxoff=0))
+    master = modbus_tcp.TcpMaster(host="192.168.1.110")
     master.set_timeout(5.0)
-    master.set_verbose(True)
-    IAQ_Data = master.execute(id, cst.READ_INPUT_REGISTERS, 0, 4)
-    IAQ_CO2 = IAQ_Data[0]
-    IAQ_VOCt = round(IAQ_Data[1]/230,2)
-    IAQ_Temperature = round(IAQ_Data[2]/100,1)
-    IAQ_Humidity = round(IAQ_Data[3]/100,1)
-    return IAQ_CO2,IAQ_VOCt,IAQ_Temperature,IAQ_Humidity
+    IAQ_Data = master.execute(id, cst.READ_INPUT_REGISTERS, 0, 8)
+    CO2 = int16_pair_to_float(IAQ_Data[1], IAQ_Data[0])
+    VOC = int16_pair_to_float(IAQ_Data[3], IAQ_Data[2])
+    temp = int16_pair_to_float(IAQ_Data[5], IAQ_Data[4])/100
+    humi = int16_pair_to_float(IAQ_Data[7], IAQ_Data[6])/100
+
+    time.sleep(1)
+    
+    return CO2,VOC,temp,humi
 
 
 def Send_Iaq():

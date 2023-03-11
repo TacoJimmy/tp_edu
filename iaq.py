@@ -10,7 +10,6 @@ import modbus_tk
 import modbus_tk.defines as cst
 from modbus_tk import modbus_tcp
 import threading
-
 import struct
 
 
@@ -52,7 +51,10 @@ def Send_Iaq():
     except:
         pass
 
+
+
 schedule.every(1).minutes.do(Send_Iaq) 
+
 
 if __name__ == '__main__':  
     

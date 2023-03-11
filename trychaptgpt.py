@@ -1,17 +1,22 @@
-import struct
+import threading
+import time
 
-def int16_pair_to_float(num1, num2):
-    """將兩個int16數值轉換為浮點數"""
-    # 將兩個int16組合成一個int32
-    combined_num = (num1 << 16) | num2
-    # 使用 struct.pack() 將int32轉換為bytes
-    packed_num = struct.pack('i', combined_num)
-    # 使用 struct.unpack() 將bytes轉換為浮點數
-    float_num = struct.unpack('f', packed_num)[0]
-    return float_num
+# 子執行緒的工作函數
+def job(num):
+  print("Thread", num)
+  time.sleep(1)
 
-# 測試程式碼
-num1 = 17530
-num2 = 0
-float_num = int16_pair_to_float(num1, num2)
-print(float_num)  # 1000.0
+# 建立 5 個子執行緒
+threads = []
+for i in range(5):
+  threads.append(threading.Thread(target = job, args = (i,)))
+  threads[i].start()
+
+# 主執行緒繼續執行自己的工作
+# ...
+
+# 等待所有子執行緒結束
+for i in range(5):
+  threads[i].join()
+
+print("Done.")

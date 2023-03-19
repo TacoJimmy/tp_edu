@@ -18,7 +18,7 @@ def int16_pair_to_float(num1, num2):
 def Read_IAQ(id):
     try:
         global master
-        master = modbus_tcp.TcpMaster(host="192.168.2.110")
+        master = modbus_tcp.TcpMaster(host="192.168.1.110")
         master.set_timeout(5.0)
         IAQ_Data = master.execute(id, cst.READ_HOLDING_REGISTERS, 0, 20)
         CO2 = round(int16_pair_to_float(IAQ_Data[1], IAQ_Data[0]))

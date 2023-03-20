@@ -152,5 +152,8 @@ def Send_PowerMeter():
     print (Read_PowerFreq())
     print (Read_MainPowerVoltage())
 
+
+create_modbus_connection()
+
 if __name__ == '__main__':
-    pass
+    print (Read_MainPowerCurrnet())

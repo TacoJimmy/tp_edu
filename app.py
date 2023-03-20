@@ -123,8 +123,8 @@ def Send_SubPower():
         print ("error")
 
 #schedule.every(1).minutes.do(Send_IAQValue)
-schedule.every(10).minutes.do(Send_MainPower)
-schedule.every(10).minutes.do(Send_SubPower)
+schedule.every(10).seconds.do(Send_MainPower)
+schedule.every(10).seconds.do(Send_SubPower)
 
 if __name__ == '__main__':
     while True:

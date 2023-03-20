@@ -122,9 +122,9 @@ def Send_SubPower():
         power_meter.create_modbus_connection()
         print ("error")
 
-schedule.every(1).minutes.do(Send_IAQValue)
-schedule.every(5).minutes.do(Send_MainPower)
-schedule.every(5).minutes.do(Send_SubPower)
+#schedule.every(1).minutes.do(Send_IAQValue)
+schedule.every(10).minutes.do(Send_MainPower)
+schedule.every(10).minutes.do(Send_SubPower)
 
 if __name__ == '__main__':
     while True:

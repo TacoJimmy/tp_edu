@@ -222,22 +222,24 @@ def check_Iaq():
                 if CO2_Limit_Flog == 0:
                     IAQ_Cond = "CO2"
                     Send_LineBot(IAQ_Cond,CO2)
-                    CO2_Limit_Flog == 1
                     Send_Iaq()
+                    CO2_Limit_Flog = 1
             else :
-                CO2_Limit_Flog == 0
+                if CO2_Limit_Flog == 1:
+                    CO2_Limit_Flog = 0
                 
             if (TVOC >= TVOC_Limit) :
                 if TVOC_Limit_Flog == 0:
                     IAQ_Cond = "TVOC"
                     Send_LineBot(IAQ_Cond,TVOC)
-                    TVOC_Limit_Flog == 1
                     Send_Iaq()
+                    TVOC_Limit_Flog = 1
             else:
-                TVOC_Limit_Flog == 0
+                if TVOC_Limit_Flog == 1:
+                    TVOC_Limit_Flog = 0
     except:
         pass
-
+    
 schedule.every(5).seconds.do(check_Iaq)
 schedule.every(1).minutes.do(Send_Iaq)
 schedule.every(1).minutes.do(Send_MainPower)

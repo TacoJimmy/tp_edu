@@ -170,16 +170,17 @@ def on_message(client, userdata, msg):
             IAQ_CO2Limit = int(data_payload['params'])
             if IAQ_CO2Limit >= 400 & IAQ_CO2Limit <= 2000:
                 IAQ_Sensor.write_CO2_Limit(IAQ_CO2Limit)
+                time.sleep(1)
                 payload_iaq = {"CO2_Limit":IAQ_CO2Limit}
                 client.publish("v1/devices/me/attributes", json.dumps(payload_iaq))
                 time.sleep(5)
                 CO2_Limit = IAQ_CO2Limit
                 
-                
         if data_payload['method'] == "TVOC":
             IAQ_TVOCLimit = int(data_payload['params'])
             if IAQ_TVOCLimit >= 50 & IAQ_TVOCLimit <= 200:
                 IAQ_Sensor.write_TVOC_Limit(IAQ_TVOCLimit)
+                time.sleep(1)
                 payload_iaq = {"TVOC_Limit":IAQ_TVOCLimit}
                 client.publish("v1/devices/me/attributes", json.dumps(payload_iaq))
                 time.sleep(5)

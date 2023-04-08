@@ -172,6 +172,7 @@ def on_message(client, userdata, msg):
                 IAQ_Sensor.write_CO2_Limit(IAQ_CO2Limit)
                 payload_iaq = {"CO2_Limit":IAQ_CO2Limit}
                 client.publish("v1/devices/me/attributes", json.dumps(payload_iaq))
+                time.sleep(5)
                 CO2_Limit = IAQ_CO2Limit
                 
                 
@@ -181,6 +182,7 @@ def on_message(client, userdata, msg):
                 IAQ_Sensor.write_TVOC_Limit(IAQ_TVOCLimit)
                 payload_iaq = {"TVOC_Limit":IAQ_TVOCLimit}
                 client.publish("v1/devices/me/attributes", json.dumps(payload_iaq))
+                time.sleep(5)
                 TVOC_Limit = IAQ_TVOCLimit
     except:
         pass

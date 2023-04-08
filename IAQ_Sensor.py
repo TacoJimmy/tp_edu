@@ -21,20 +21,79 @@ def Read_IAQ(id):
         master = modbus_tcp.TcpMaster(host="192.168.1.110")
         master.set_timeout(5.0)
         IAQ_Data = master.execute(id, cst.READ_HOLDING_REGISTERS, 0, 20)
+        
         CO2 = round(int16_pair_to_float(IAQ_Data[1], IAQ_Data[0]))
-        PM25 = round(int16_pair_to_float(IAQ_Data[3], IAQ_Data[2]))
-        PM10 = round(int16_pair_to_float(IAQ_Data[5], IAQ_Data[4]))
-        CO = round(int16_pair_to_float(IAQ_Data[7], IAQ_Data[6]))
-        HCHO = round(int16_pair_to_float(IAQ_Data[9], IAQ_Data[8]),2)
-        ammonia = round(int16_pair_to_float(IAQ_Data[11], IAQ_Data[10]),1)
-        O2 = round(int16_pair_to_float(IAQ_Data[13], IAQ_Data[12]),2)
-        TVOC = round(int16_pair_to_float(IAQ_Data[15], IAQ_Data[14]))
-        Temp = round(int16_pair_to_float(IAQ_Data[17], IAQ_Data[16]),2)
-        Humi = round(int16_pair_to_float(IAQ_Data[19], IAQ_Data[18]),2)
+        TVOC = round(int16_pair_to_float(IAQ_Data[3], IAQ_Data[2]))
+        Temp = round(int16_pair_to_float(IAQ_Data[5], IAQ_Data[4]),1)
+        Humi = round(int16_pair_to_float(IAQ_Data[7], IAQ_Data[6]),1)
         time.sleep(1)
-        return CO2,PM25,PM10,CO,HCHO,ammonia,O2,TVOC,Temp,Humi
+        return CO2,TVOC,Temp,Humi
+    except:
+        pass
+
+def Read_CO2Limit():
+    try:
+        global master
+        master = modbus_tcp.TcpMaster(host="192.168.1.110")
+        master.set_timeout(5.0)
+        IAQ_Data = master.execute(1, cst.READ_HOLDING_REGISTERS, 8, 2)
+        CO2_Limit = round(int16_pair_to_float(IAQ_Data[1], IAQ_Data[0]))
+        time.sleep(1)
+        return CO2_Limit
+    except:
+        return "error"
+
+def Read_TVOCLimit():
+    try:
+        global master
+        master = modbus_tcp.TcpMaster(host="192.168.1.110")
+        master.set_timeout(5.0)
+        IAQ_Data = master.execute(1, cst.READ_HOLDING_REGISTERS, 10, 2)
+        TVOCLimit = round(int16_pair_to_float(IAQ_Data[1], IAQ_Data[0]))
+        time.sleep(1)
+        return TVOCLimit
+    except:
+        return "error"
+
+def write_CO2_Limit(CO2Limet_Value):
+    global master
+    try:
+        if (CO2Limet_Value >= 200) & (CO2Limet_Value <= 2000):
+            master = modbus_tcp.TcpMaster(host="192.168.1.110")
+            master.set_timeout(5.0)
+            print (master.execute(1, cst.WRITE_MULTIPLE_REGISTERS, 9, output_value=[CO2Limet_Value],data_format='!f'))
+            time.sleep(1)
+            #IAQ_Data = master.execute(1, cst.READ_HOLDING_REGISTERS, 8, data_format='!f')
+            #CO2_Limit = round(int16_pair_to_float(IAQ_Data[1], IAQ_Data[0]))
+            #print (IAQ_Data)
+            time.sleep(1)
+        else:
+            print("Input_error")
+    except:
+        pass
+        
+def write_TVOC_Limit(TVOCLimet_Value):
+    global master
+    try:
+        if (TVOCLimet_Value >= 50) & (TVOCLimet_Value <= 300):
+            master = modbus_tcp.TcpMaster(host="192.168.1.110")
+            master.set_timeout(5.0)
+            print (master.execute(1, cst.WRITE_MULTIPLE_REGISTERS, 11, output_value=[TVOCLimet_Value],data_format='!f'))
+            time.sleep(1)
+            #IAQ_Data = master.execute(1, cst.READ_HOLDING_REGISTERS, 8, data_format='!f')
+            #CO2_Limit = round(int16_pair_to_float(IAQ_Data[1], IAQ_Data[0]))
+            #print (IAQ_Data)
+            time.sleep(1)
     except:
         pass
 
 if __name__ == '__main__':
-    print (Read_IAQ(1))
+    write_CO2_Limit(1000)
+    print (Read_CO2Limit())
+    write_TVOC_Limit(90)
+    print (Read_TVOCLimit())
+    #print(Read_IAQ(1))
+    #write_CO2_Limit(0,17530)
+    #print (Read_CO2Limit())
+    
+    

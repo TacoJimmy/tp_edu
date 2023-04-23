@@ -34,6 +34,8 @@ def Send_MainPower():
         PowerkW = power_meter.Read_MainPowerkW()
         PowerkVAR = power_meter.Read_MainPowerkVAR()
         PowerkVAS = power_meter.Read_MainPowerkVAS()
+        PowerkWh = power_meter.Read_MainPowerComsumption()
+        PowerDM = power_meter.Read_MainPowerDM()
         #MQTT_Connect()
         client = mqtt.Client()
         client.on_connect
@@ -60,7 +62,9 @@ def Send_MainPower():
                        "PowerkVAS1":PowerkVAS[0],
                        "PowerkVAS2":PowerkVAS[1],
                        "PowerkVAS3":PowerkVAS[2],
-                       "PowerkVASavg":PowerkVAS[3]
+                       "PowerkVASavg":PowerkVAS[3],
+                       "PowerkWh":PowerkWh[0],
+                       "PowerDM":PowerDM[0]
                        }
         print(json.dumps(payload_iaq))
         print(client.publish("v1/devices/me/telemetry", json.dumps(payload_iaq)))

@@ -15,7 +15,8 @@ import struct
 def create_modbus_connection():
     global master
     try:
-        master = modbus_rtu.RtuMaster(serial.Serial(port='/dev/ttyS1', baudrate=9600, bytesize=8, parity="N", stopbits=1, xonxoff=0))
+        master = modbus_rtu.RtuMaster(serial.Serial(port='COM14', baudrate=9600, bytesize=8, parity="N", stopbits=1, xonxoff=0))
+        #master = modbus_rtu.RtuMaster(serial.Serial(port='/dev/ttyS1', baudrate=9600, bytesize=8, parity="N", stopbits=1, xonxoff=0))
         master.set_timeout(5.0)
         master.set_verbose(True)
     except:
@@ -148,12 +149,34 @@ def Read_SubPowerkVAS(Cound):
     PowerkVAS_Iavg = conv(PowerkVAS_Data[7], PowerkVAS_Data[6])
     return PowerkVAS_I1, PowerkVAS_I2, PowerkVAS_I3, PowerkVAS_Iavg
 
-def Send_PowerMeter():
-    print (Read_PowerFreq())
-    print (Read_MainPowerVoltage())
 
+def Read_SubPowerkVAS(Cound):
+    Reg_addr = 5144 + 768 * Cound
+    PowerkVAS_Data = master.execute(1, cst.READ_HOLDING_REGISTERS, Reg_addr, 8)
+    time.sleep(1)
+    PowerkVAS_I1 = conv(PowerkVAS_Data[1], PowerkVAS_Data[0])
+    PowerkVAS_I2 = conv(PowerkVAS_Data[3], PowerkVAS_Data[2])
+    PowerkVAS_I3 = conv(PowerkVAS_Data[5], PowerkVAS_Data[4])
+    PowerkVAS_Iavg = conv(PowerkVAS_Data[7], PowerkVAS_Data[6])
+    return PowerkVAS_I1, PowerkVAS_I2, PowerkVAS_I3, PowerkVAS_Iavg
+
+def Read_MainPowerComsumption():
+    Reg_addr = 4167
+    PowerkWh_Data = master.execute(1, cst.READ_HOLDING_REGISTERS, Reg_addr, 2)
+    time.sleep(1)
+    PowerkWh = round(conv(PowerkWh_Data[1], PowerkWh_Data[0])*0.1,1)
+
+    return PowerkWh,
+
+def Read_MainPowerDM():
+    Reg_addr = 4161
+    PowerDM_Data = master.execute(1, cst.READ_HOLDING_REGISTERS, Reg_addr, 2)
+    time.sleep(1)
+    PowerDM = round(conv(PowerDM_Data[1], PowerDM_Data[0]),1)
+
+    return PowerDM,
 
 create_modbus_connection()
 
 if __name__ == '__main__':
-    print (Read_MainPowerCurrnet())
+    print (Read_MainPowerDM())

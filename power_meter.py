@@ -15,8 +15,8 @@ import struct
 def create_modbus_connection():
     global master
     try:
-        master = modbus_rtu.RtuMaster(serial.Serial(port='COM14', baudrate=9600, bytesize=8, parity="N", stopbits=1, xonxoff=0))
-        #master = modbus_rtu.RtuMaster(serial.Serial(port='/dev/ttyS1', baudrate=9600, bytesize=8, parity="N", stopbits=1, xonxoff=0))
+        #master = modbus_rtu.RtuMaster(serial.Serial(port='COM14', baudrate=9600, bytesize=8, parity="N", stopbits=1, xonxoff=0))
+        master = modbus_rtu.RtuMaster(serial.Serial(port='/dev/ttyS1', baudrate=9600, bytesize=8, parity="N", stopbits=1, xonxoff=0))
         master.set_timeout(5.0)
         master.set_verbose(True)
     except:

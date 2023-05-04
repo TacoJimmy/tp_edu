@@ -13,7 +13,7 @@ import struct
 import IAQ_Sensor
 import power_meter
 
-
+'''
 def Send_IAQValue():
     try:
         IAQ_Value = IAQ_Sensor.Read_IAQ(1)
@@ -41,7 +41,7 @@ def Send_IAQValue():
     except:
         print ("error")
 
-
+'''
 def Send_MainPower():
     try:
         PowerFrq_Value = power_meter.Read_PowerFreq()

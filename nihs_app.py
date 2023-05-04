@@ -262,11 +262,11 @@ schedule.every(1).minutes.do(Send_SubPower)
 
 
 if __name__ == '__main__':
-    
+    '''
     t1 = threading.Thread(target = ipc_subscribe)
     time.sleep(.5)
     t1.start()
-    
+    '''
     while True:
         schedule.run_pending()
         time.sleep(1)

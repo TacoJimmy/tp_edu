@@ -246,11 +246,20 @@ def check_Iaq():
                     TVOC_Limit_Flog = 0
     except:
         pass
-    
+
+
+schedule.every(5).seconds.do(check_Iaq)
+schedule.every(30).seconds.do(Send_Iaq)
+schedule.every(30).seconds.do(Send_MainPower)
+schedule.every(30).seconds.do(Send_SubPower)
+
+'''
 schedule.every(5).seconds.do(check_Iaq)
 schedule.every(1).minutes.do(Send_Iaq)
 schedule.every(1).minutes.do(Send_MainPower)
 schedule.every(1).minutes.do(Send_SubPower)
+'''
+
 
 if __name__ == '__main__':
     
